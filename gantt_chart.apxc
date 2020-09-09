@@ -1,0 +1,39 @@
+public class GanttChart {
+    public List<String> Name{get;set;}
+    public List<String> SDate{get;set;}
+    public List<String> EDate{get;set;}
+    public List<Integer> Duration{get;set;}    
+ 
+    
+    public GanttChart(){
+        List<Event> taskList = new List<Event>();
+        Name = new List<String>();
+        SDate = new List<String>();
+        EDate = new List<String>();
+        Duration = new List<Integer>();
+        
+        
+        Integer dd;
+        Integer month;
+        Integer year;
+        
+        String whatId=ApexPages.currentPage().getParameters().get('id');
+        taskList = [SELECT Id, Subject, StartDateTime, EndDateTime  FROM Event WHERE WhatId=:whatId];     
+        for(Event ts:taskList){
+            
+            dd = ts.StartDateTime.day();
+            month=ts.StartDateTime.month();
+            year = ts.StartDateTime.year();
+            Name.add(ts.Subject);
+            SDate.add(year+'-'+month+'-'+dd);
+            dd = ts.EndDateTime.day();
+            month=ts.EndDateTime.month();
+            year = ts.EndDateTime.year();
+            EDate.add(year+'-'+month+'-'+dd);
+            Integer dt = (system.today()).daysBetween(Date.valueOf(ts.EndDateTime));
+            Duration.add(dt);
+                     
+            
+        }
+    }
+}
